@@ -77,7 +77,7 @@ public class BigMiningMechanicListener implements Listener {
         blocksToProcess += 1; // to avoid this method to call itself <- need other way to handle players using
         // the same tool at the same time
         final BlockBreakEvent blockBreakEvent = new BlockBreakEvent(block, player);
-        if (factory.callEvents()) Bukkit.getPluginManager().callEvent(blockBreakEvent);
+        Bukkit.getPluginManager().callEvent(blockBreakEvent);
         if (!blockBreakEvent.isCancelled()) {
             block.breakNaturally(itemStack);
         }

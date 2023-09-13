@@ -24,7 +24,7 @@ public class BigMiningMechanicFactory extends MechanicFactory {
     }
 
     public boolean callEvents() {
-        return callEvents;
+        return true;
     }
 
 }
