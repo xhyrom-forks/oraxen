@@ -1,6 +1,7 @@
 package io.th0rgal.oraxen.mechanics.provided.farming.bigmining;
 
 import io.th0rgal.oraxen.utils.Constants;
+import io.th0rgal.oraxen.utils.timers.Timer;
 import io.th0rgal.protectionlib.ProtectionLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,6 +40,14 @@ public class BigMiningMechanicListener implements Listener {
         final BigMiningMechanic mechanic = (BigMiningMechanic) factory.getMechanic(item);
         if (mechanic == null || lastTwoTargetBlocks.size() < 2) return;
 
+        final Timer playerTimer = mechanic.getTimer(player);
+        if (!playerTimer.isFinished()) {
+            mechanic.getTimer(player).sendToPlayer(player);
+            return;
+        }
+
+        playerTimer.reset();
+
         final Block nearestBlock = lastTwoTargetBlocks.get(0);
         final Block secondBlock = lastTwoTargetBlocks.get(1);
         final BlockFace blockFace = secondBlock.getFace(nearestBlock);
@@ -70,9 +79,7 @@ public class BigMiningMechanicListener implements Listener {
         final BlockBreakEvent blockBreakEvent = new BlockBreakEvent(block, player);
         if (factory.callEvents()) Bukkit.getPluginManager().callEvent(blockBreakEvent);
         if (!blockBreakEvent.isCancelled()) {
-            if (blockBreakEvent.isDropItems())
-                block.breakNaturally(itemStack);
-            else block.setType(Material.AIR);
+            block.breakNaturally(itemStack);
         }
     }
 
